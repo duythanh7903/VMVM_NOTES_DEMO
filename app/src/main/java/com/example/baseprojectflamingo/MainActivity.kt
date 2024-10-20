@@ -5,14 +5,14 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.baseprojectflamingo.databinding.ActivityMainBinding
-import com.example.baseprojectflamingo.entities.Note
+import com.example.baseprojectflamingo.viewmodel.MainDtoViewModel
 import com.example.baseprojectflamingo.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainDtoViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
 
@@ -21,17 +21,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        insertNote()
-        observe()
-    }
-
-    private fun insertNote() {
-        val note = Note(title = "This is test title", content = "This is test content")
-        viewModel.insertNote(note)
-    }
-
-    private fun observe() = viewModel.apply {
-        notesData.observe(this@MainActivity) { data ->
+        viewModel.notes.observe(this) { data ->
             Log.d("duylt", "List: $data")
         }
     }
